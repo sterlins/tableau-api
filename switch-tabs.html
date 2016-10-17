@@ -8,10 +8,9 @@
 
   </head>
     <body>
-      <h1>Using tabs to select which dashboard to appear</h1>
-      <!-- Insert a bunch of links and then have them control which dashboard appears -->
-      <!-- https://public.tableau.com/en-us/s/gallery/ww1-timeline -->
+      <h1>Using tabs to select which dashboard to appear</h1 >
 
+      <!--Insert a button group which acts as a menu and onclick fires the chooseTab() function with the selected tab name-->
       <div class="btn-group" role="group" id="tab-selector">
         <button type="button" class="btn btn-default" onclick="chooseTab(this.value)" role="group" value="WW1 Timeline">WW1 Timeline</button>
         <button type="button" class="btn btn-default" onclick="chooseTab(this.value)" role="group" value="Find a Relative">Find a Relative</button>
@@ -32,7 +31,7 @@
     <!-- All this goes in between script tags -->
     <script>
 
-
+    //Instantiate the viz, with the default view you'd like to see
     function initViz() {
        var containerDiv = document.getElementById("vizContainer");
       var url = "https://public.tableau.com/views/WW1Timeline/WW1Timeline";
@@ -48,6 +47,7 @@
 
     initViz();
 
+    //the chooseTab function is launched based on the buttons above and chooses which sheet should be active
     function chooseTab(value) {
       workbook.activateSheetAsync(value);
     }

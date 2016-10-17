@@ -10,6 +10,7 @@
     <body>
       <h1>Using a filter in the webpage to control the dashboard</h1>
 
+  <!-- Add select menu for gender which calls the function updateGender with the selected value -->
   <div class="row">
     <div class="col-md-2">
       Select Gender:<select class="form-control" id="genderSelect" onchange="updateGender(value)">
@@ -39,8 +40,10 @@
     <!-- All this goes in between script tags -->
     <script>
 
-      function initViz() {
+    //Instantiate the viz
+    function initViz() {
         var containerDiv = document.getElementById("vizContainer");
+        // url should not have any parameters in it
         var url = "https://public.tableau.com/shared/5PK5QM2R7";
         var options = {
           hideTabs: true,
@@ -54,13 +57,15 @@
 
       initViz();
 
+      // Now write a function that replaces the filter based on what values are chosen in the 'select' above
+      // We need one statement that has "all" values and one that lets you swap between male and female
       function updateGender(value) {
         if (value==="(All)"){
           activeSheet.applyFilterAsync(
             "Gender",
             value,
             tableau.FilterUpdateType.ALL);
-          } else if (value !=="(ALL)"){
+          } else if (value !=="(All)"){
             activeSheet.applyFilterAsync(
               "Gender",
               value,

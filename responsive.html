@@ -20,6 +20,7 @@
     <script src="https://online.tableau.com/javascripts/api/tableau-version.js"></script>
     <script src="https://public.tableau.com/javascripts/api/tableau-version.js"></script> -->
     <script src="https://public.tableau.com/javascripts/api/tableau-2.js"></script>
+    <!--Jquery is required to enable the $(window).width() function below-->
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 
     <!-- Create a viz object -->
@@ -27,13 +28,18 @@
     <script>
       var url
 
+      //Instantiate the viz
       function initViz() {
         var containerDiv = document.getElementById("vizContainer");
+        //decide which view to show based on the size of the screen
           if ($(window).width() < 700) {
+            //mobile view
             url = "https://public.tableau.com/views/DashboardLayout_3/iPhoneDash";
           } else if($(window).width() < 1250) {
+            //ipad view
             url = "https://public.tableau.com/views/DashboardLayout_3/iPadPortraitDash";
           } else {
+            //desktop view
             url = "https://public.tableau.com/views/DashboardLayout_3/PCDash";
           };
         var options = {
