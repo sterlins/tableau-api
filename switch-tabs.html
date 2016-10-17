@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Javascript API Examples in Tableau</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  </head>
+    <body>
+      <h1>Using tabs to select which dashboard to appear</h1>
+      <!-- Insert a bunch of links and then have them control which dashboard appears -->
+      <!-- https://public.tableau.com/en-us/s/gallery/ww1-timeline -->
+
+      <div class="btn-group" role="group" id="tab-selector">
+        <button type="button" class="btn btn-default" onclick="chooseTab(this.value)" role="group" value="WW1 Timeline">WW1 Timeline</button>
+        <button type="button" class="btn btn-default" onclick="chooseTab(this.value)" role="group" value="Find a Relative">Find a Relative</button>
+      </div>
+      <p>This is an example of how you can use buttons to update which tab is showing</p>
+
+      <!-- You need to have a div element with the id="vizContainer" to put this on the page -->
+      <div id="vizContainer"></div>
+
+    <!-- First you need to get the Javascript API, but make sure that it matches to your version of Server, Public, or Online
+    <script src="https://YOUR-SERVER/javascripts/api/tableau-version.js"></script>
+    <script src="https://online.tableau.com/javascripts/api/tableau-version.js"></script>
+    <script src="https://public.tableau.com/javascripts/api/tableau-version.js"></script> -->
+
+    <script src="https://public.tableau.com/javascripts/api/tableau-2.js"></script>
+
+    <!-- Create a viz object -->
+    <!-- All this goes in between script tags -->
+    <script>
+
+
+    function initViz() {
+       var containerDiv = document.getElementById("vizContainer");
+      var url = "https://public.tableau.com/views/WW1Timeline/WW1Timeline";
+      var options = {
+        hideTabs: true,
+        onFirstInteractive: function () {
+          workbook = viz.getWorkbook();
+          activeSheet = workbook.getActiveSheet();
+       }
+     };
+       var viz = new tableau.Viz(containerDiv, url, options);
+    };
+
+    initViz();
+
+    function chooseTab(value) {
+      workbook.activateSheetAsync(value);
+    }
+    </script>
+
+  </body>
+
+</html>

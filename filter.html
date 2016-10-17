@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Javascript API Examples in Tableau</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  </head>
+    <body>
+      <h1>Using a filter in the webpage to control the dashboard</h1>
+
+  <div class="row">
+    <div class="col-md-2">
+      Select Gender:<select class="form-control" id="genderSelect" onchange="updateGender(value)">
+        <option value="(All)">All</option>
+        <option value="Men">Men</option>
+        <option value="Women">Women</option>
+      </select>
+    </div>
+    <div class="col-md-10">
+    </div>
+  </div>
+
+    <p>This is an example of how you can use a filter within the webpage to control the data displayed within the dashboard</p>
+
+      <!-- You need to have a div element with the id="vizContainer" to put this on the page -->
+      <div id="vizContainer"></div>
+
+    <!-- First you need to get the Javascript API, but make sure that it matches to your version of Server, Public, or Online
+    <script src="https://YOUR-SERVER/javascripts/api/tableau-version.js"></script>
+    <script src="https://online.tableau.com/javascripts/api/tableau-version.js"></script>
+    <script src="https://public.tableau.com/javascripts/api/tableau-version.js"></script> -->
+    <script src="https://public.tableau.com/javascripts/api/tableau-2.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.js"></script>
+
+    <!-- Create a viz object -->
+    <!-- All this goes in between script tags -->
+    <script>
+
+      function initViz() {
+        var containerDiv = document.getElementById("vizContainer");
+        var url = "https://public.tableau.com/shared/5PK5QM2R7";
+        var options = {
+          hideTabs: true,
+          onFirstInteractive: function () {
+            workbook = viz.getWorkbook();
+            activeSheet = workbook.getActiveSheet();
+         }
+       };
+         var viz = new tableau.Viz(containerDiv, url, options);
+      };
+
+      initViz();
+
+      function updateGender(value) {
+        if (value==="(All)"){
+          activeSheet.applyFilterAsync(
+            "Gender",
+            value,
+            tableau.FilterUpdateType.ALL);
+          } else if (value !=="(ALL)"){
+            activeSheet.applyFilterAsync(
+              "Gender",
+              value,
+            tableau.FilterUpdateType.REPLACE);
+            }
+        }
+
+
+    </script>
+
+  </body>
+
+</html>
