@@ -1,1 +1,1 @@
-"# tableau-api" 
+The purpose of this project is to provide examples of how to use the Javascript API with Tableau.  I am very new to Javascript so I'm sure there are better ways of writing this code, but it does work!
