@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Using the Javascript API to pass through filter values</title>
+</head>
+
+  <body>
+    <p>This is an example of how you can use the Javascript API to look for values in the URL string and pass them through as a filter option</p>
+    <p>In addition, it looks at the screensize to decide whether to display the mobile or desktop version of the dashboard</p>
+
+    <script src="https://public.tableau.com/javascripts/api/tableau-2.js"></script>
+    <!-- Jquery is required for getting the window size -->
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <!-- This code is required to parse the values we need from the URL.  Note that this library is no longer maintained, and there are better methods of doing this.
+    However, we used this library because Wordpress (which we post in) is unable to accept the ampersand character -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-url-parser/2.3.1/purl.min.js"></script>
+
+    <!-- The vizContainer is where the dashboard will appear -->
+    <div id="vizContainer"></div>
+    <script>// <![CDATA[
+      // For this particular dashboard, we required the suburb filter values to be in titleCase.  It's important to exactly match the case of the data field
+      function titleCase(str) {
+        return str.split(' ').map(function(val){
+          return val.charAt(0).toUpperCase() + val.substr(1).toLowerCase();
+        }).join(' ');
+      }
+
+      // Instantiate
+      function initViz() {
+        var containerDiv = document.getElementById("vizContainer");
+
+        var url;
+        var options;
+
+        //This choses whether to show the mobile or desktop version based on window size.
+        //Note this does not automatically resize if the screen size changes (e.g., from potrait to landscape).  This feature could be easily added in.
+        if ($(window).width() < 550) {
+                  url = "https://public.tableau.com/views/Mostindemandsuburbs-Mobile/Mockdashboardforindemandsuburbs";
+                } else {
+                  url = "https://public.tableau.com/views/Mostindemandsuburbs-Desktop/Mockdashboardforindemandsuburbs";
+                } ;
+
+          //Could this be combined with the step above?
+          //For this particular dashboard, we have a state & suburb value filter on the mobile version, but suburb value filter only on the desktop version
+          if ($(window).width() < 550) {
+            options = {hideTabs: true,
+                         "Suburb_State_Postcode": filterValue,
+                         "state": statename};
+          }  else {
+            options = {hideTabs: true,
+                         "Suburb_State_Postcode": filterValue};
+          }
+
+         var viz = new tableau.Viz(containerDiv, url, options);
+
+          workbook = viz.getWorkbook();
+        }
+
+      //Look at the URL to get the following variables
+      //The URL structure is expected to be:
+      //http://www.sitename.com./news/post-name?suburb=SUBURB&postcode=POSTCODE&state=STATE
+      var suburb = jQuery.url(window.location.href).param('suburb');
+      var statename = jQuery.url(window.location.href).param('state');
+      var postcode = jQuery.url(window.location.href).param('postcode');
+      var filterValue
+
+      //Need to handle cases where there is no parameter string in the URL (e.g.,http://www.sitename.com./news/post-name for people coming from another source)
+        if(suburb==null || statename==null || postcode==null){
+             filterValue = '- Select suburb -';
+             statename = '- Select state -';
+             postcode = '';
+        }
+        //Need to handle cases where the parameter passed through is blank (i.e., when consumer does not have any stated suburb/state/postcode value we can use)
+        else if(suburb==='' || statename==='' || postcode===''){
+             filterValue = '- Select suburb -';
+             statename = '- Select state -';
+             postcode = '';
+        }
+        //Originally we had "$" included in the parameter, the replace function addresses that
+        //Suburb must be Title Case; state name must be UPPER
+          else {
+             filterValue = titleCase(suburb.replace(/\$/g,""))+" "+statename.replace(/\$/g,"")+" "+postcode.replace(/\$/g,"");
+             statename = statename.replace(/\$/g,"");
+        }
+
+        //Logs to console to test
+        console.log(suburb);
+        console.log(statename);
+        console.log(postcode);
+        console.log(filterValue);
+
+
+      initViz();
+    // ]]>
+    </script>
+</body>
+</html>
